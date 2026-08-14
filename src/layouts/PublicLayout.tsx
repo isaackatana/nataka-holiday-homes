@@ -1,5 +1,6 @@
-import { Outlet, Link } from 'react-router-dom'
-import { MessageCircle } from 'lucide-react'
+import { Outlet, Link, useNavigate } from 'react-router-dom'
+import { MessageCircle, Heart, CalendarCheck, User, LogOut } from 'lucide-react'
+import { useAuth } from '@/features/auth/AuthContext'
 
 const NAV_LINKS = [
   { label: 'Holiday Homes', to: '/holiday-homes' },
@@ -14,6 +15,14 @@ const NAV_LINKS = [
  * WhatsApp deep-link builder land alongside the Home page build (Step 8).
  */
 export function PublicLayout() {
+  const { user, profile, signOut } = useAuth()
+  const navigate = useNavigate()
+
+  async function handleSignOut() {
+    await signOut()
+    navigate('/')
+  }
+
   return (
     <div className="flex min-h-screen flex-col bg-sand-50">
       <header className="sticky top-0 z-40 border-b border-sand-200 bg-sand-50/90 backdrop-blur">
@@ -32,12 +41,46 @@ export function PublicLayout() {
               </Link>
             ))}
           </nav>
-          <Link
-            to="/login"
-            className="rounded-full border border-teal-900 px-5 py-2 text-sm font-medium text-teal-900 transition-colors hover:bg-teal-900 hover:text-sand-50"
-          >
-            Sign in
-          </Link>
+
+          {user ? (
+            <div className="flex items-center gap-4">
+              <Link
+                to="/favorites"
+                aria-label="Favorites"
+                className="text-charcoal-700 transition-colors hover:text-teal-800"
+              >
+                <Heart className="h-5 w-5" />
+              </Link>
+              <Link
+                to="/my-bookings"
+                aria-label="My bookings"
+                className="text-charcoal-700 transition-colors hover:text-teal-800"
+              >
+                <CalendarCheck className="h-5 w-5" />
+              </Link>
+              <Link
+                to="/profile"
+                className="flex items-center gap-2 text-sm font-medium text-charcoal-700 transition-colors hover:text-teal-800"
+              >
+                <User className="h-5 w-5" />
+                {profile?.full_name?.split(' ')[0] ?? 'Account'}
+              </Link>
+              <button
+                onClick={handleSignOut}
+                aria-label="Sign out"
+                className="text-charcoal-500 transition-colors hover:text-coral-500"
+              >
+                <LogOut className="h-5 w-5" />
+              </button>
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              className="rounded-full border border-teal-900 px-5 py-2 text-sm font-medium text-teal-900 transition-colors hover:bg-teal-900 hover:text-sand-50"
+            >
+              Sign in
+            </Link>
+          )}
         </div>
       </header>
 

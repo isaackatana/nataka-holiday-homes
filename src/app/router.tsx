@@ -2,6 +2,8 @@ import { createBrowserRouter } from 'react-router-dom'
 import { PublicLayout } from '@/layouts/PublicLayout'
 import { AuthLayout } from '@/layouts/AuthLayout'
 import { AdminLayout } from '@/layouts/AdminLayout'
+import { RequireAuth } from '@/features/auth/RequireAuth'
+import { RequireAdmin } from '@/features/auth/RequireAdmin'
 
 import Home from '@/pages/public/Home'
 import HolidayHomes from '@/pages/public/HolidayHomes'
@@ -14,6 +16,7 @@ import NotFound from '@/pages/public/NotFound'
 import Login from '@/pages/auth/Login'
 import Register from '@/pages/auth/Register'
 import ForgotPassword from '@/pages/auth/ForgotPassword'
+import ResetPassword from '@/pages/auth/ResetPassword'
 
 import Favorites from '@/pages/account/Favorites'
 import MyBookings from '@/pages/account/MyBookings'
@@ -28,10 +31,6 @@ import AdminReviews from '@/pages/admin/Reviews'
 import AdminExperiences from '@/pages/admin/Experiences'
 import AdminSettings from '@/pages/admin/Settings'
 
-// NOTE: /favorites, /my-bookings, /profile, and every /admin/* route will be
-// wrapped in <RequireAuth> / <RequireAdmin> guards once auth lands (Step 7).
-// Left unguarded here so the route tree itself can be reviewed and built
-// against before authentication exists.
 export const router = createBrowserRouter([
   {
     element: <PublicLayout />,
@@ -42,9 +41,17 @@ export const router = createBrowserRouter([
       { path: '/experiences', element: <Experiences /> },
       { path: '/about', element: <About /> },
       { path: '/contact', element: <Contact /> },
-      { path: '/favorites', element: <Favorites /> },
-      { path: '/my-bookings', element: <MyBookings /> },
-      { path: '/profile', element: <Profile /> },
+      {
+        // Customer-only pages — redirect to /login (with a return path) if
+        // there's no session at all. Role isn't checked here since any
+        // authenticated user (customer or admin) may use these.
+        element: <RequireAuth />,
+        children: [
+          { path: '/favorites', element: <Favorites /> },
+          { path: '/my-bookings', element: <MyBookings /> },
+          { path: '/profile', element: <Profile /> },
+        ],
+      },
     ],
   },
   {
@@ -53,21 +60,29 @@ export const router = createBrowserRouter([
       { path: '/login', element: <Login /> },
       { path: '/register', element: <Register /> },
       { path: '/forgot-password', element: <ForgotPassword /> },
+      { path: '/reset-password', element: <ResetPassword /> },
     ],
   },
   {
     path: '/admin',
-    element: <AdminLayout />,
+    // Every /admin/* route requires role = 'admin' — RequireAdmin redirects
+    // signed-out users to /login and signed-in non-admins to /.
+    element: <RequireAdmin />,
     children: [
-      { index: true, element: <Dashboard /> },
-      { path: 'properties', element: <AdminProperties /> },
-      { path: 'properties/new', element: <PropertyEditor /> },
-      { path: 'properties/:id/edit', element: <PropertyEditor /> },
-      { path: 'bookings', element: <AdminBookings /> },
-      { path: 'customers', element: <AdminCustomers /> },
-      { path: 'reviews', element: <AdminReviews /> },
-      { path: 'experiences', element: <AdminExperiences /> },
-      { path: 'settings', element: <AdminSettings /> },
+      {
+        element: <AdminLayout />,
+        children: [
+          { index: true, element: <Dashboard /> },
+          { path: 'properties', element: <AdminProperties /> },
+          { path: 'properties/new', element: <PropertyEditor /> },
+          { path: 'properties/:id/edit', element: <PropertyEditor /> },
+          { path: 'bookings', element: <AdminBookings /> },
+          { path: 'customers', element: <AdminCustomers /> },
+          { path: 'reviews', element: <AdminReviews /> },
+          { path: 'experiences', element: <AdminExperiences /> },
+          { path: 'settings', element: <AdminSettings /> },
+        ],
+      },
     ],
   },
   { path: '*', element: <NotFound /> },

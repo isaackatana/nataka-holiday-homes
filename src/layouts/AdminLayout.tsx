@@ -1,4 +1,4 @@
-import { Outlet, Link, useLocation } from 'react-router-dom'
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard,
   Home,
@@ -7,7 +7,9 @@ import {
   Star,
   Compass,
   Settings,
+  LogOut,
 } from 'lucide-react'
+import { useAuth } from '@/features/auth/AuthContext'
 
 const NAV_ITEMS = [
   { label: 'Dashboard', to: '/admin', icon: LayoutDashboard },
@@ -26,6 +28,13 @@ const NAV_ITEMS = [
  */
 export function AdminLayout() {
   const location = useLocation()
+  const { profile, signOut } = useAuth()
+  const navigate = useNavigate()
+
+  async function handleSignOut() {
+    await signOut()
+    navigate('/')
+  }
 
   return (
     <div className="flex min-h-screen bg-sand-100">
@@ -55,10 +64,21 @@ export function AdminLayout() {
       </aside>
 
       <div className="flex-1">
-        <header className="border-b border-sand-200 bg-sand-50 px-8 py-4">
+        <header className="flex items-center justify-between border-b border-sand-200 bg-sand-50 px-8 py-4">
           <p className="font-mono text-xs uppercase tracking-[0.15em] text-charcoal-500">
             Admin
           </p>
+          <div className="flex items-center gap-4 text-sm text-charcoal-700">
+            <span>{profile?.full_name ?? 'Admin'}</span>
+            <button
+              onClick={handleSignOut}
+              aria-label="Sign out"
+              className="flex items-center gap-1.5 text-charcoal-500 transition-colors hover:text-coral-500"
+            >
+              <LogOut className="h-4 w-4" />
+              Sign out
+            </button>
+          </div>
         </header>
         <main>
           <Outlet />
