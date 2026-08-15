@@ -8,6 +8,7 @@ import { PropertyCardSkeleton } from '@/components/property/PropertyCardSkeleton
 import { ExperienceCard } from '@/components/property/ExperienceCard'
 import { useFeaturedProperties } from '@/features/properties/queries'
 import { useExperiences } from '@/features/experiences/queries'
+import { useFavoriteActions } from '@/features/favorites/useFavoriteActions'
 import { DESTINATIONS } from '@/data/destinations'
 import { WHY_CHOOSE_US, TESTIMONIALS } from '@/data/content'
 import { buildWhatsAppLink } from '@/utils/whatsapp'
@@ -17,6 +18,7 @@ const ICONS = { 'shield-check': ShieldCheck, 'message-circle': MessageCircle, 'm
 export default function Home() {
   const { data: featuredProperties, isLoading: featuredLoading } = useFeaturedProperties(6)
   const { data: experiences, isLoading: experiencesLoading } = useExperiences(3)
+  const { isFavorited, handleToggle } = useFavoriteActions()
 
   return (
     <div className="flex flex-col">
@@ -78,7 +80,12 @@ export default function Home() {
           )}
 
           {featuredProperties?.map((property) => (
-            <PropertyCard key={property.id} property={property} />
+            <PropertyCard
+              key={property.id}
+              property={property}
+              isFavorited={isFavorited(property.id)}
+              onToggleFavorite={handleToggle}
+            />
           ))}
         </div>
 

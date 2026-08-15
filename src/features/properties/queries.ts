@@ -3,9 +3,11 @@ import {
   getFeaturedProperties,
   getPublishedProperties,
   getPropertyBySlug,
+  getRelatedProperties,
   type PropertyFilters,
 } from '@/services/properties.service'
 import { getAmenities } from '@/services/amenities.service'
+import type { Property } from '@/types/domain'
 
 export function useFeaturedProperties(limit = 6) {
   return useQuery({
@@ -34,5 +36,13 @@ export function useAmenities() {
     queryKey: ['amenities'],
     queryFn: getAmenities,
     staleTime: 5 * 60 * 1000, // reference data — barely changes
+  })
+}
+
+export function useRelatedProperties(property: Property | null | undefined) {
+  return useQuery({
+    queryKey: ['properties', 'related', property?.id],
+    queryFn: () => getRelatedProperties(property!),
+    enabled: !!property,
   })
 }

@@ -6,6 +6,7 @@ import { PropertyCard } from '@/components/property/PropertyCard'
 import { PropertyCardSkeleton } from '@/components/property/PropertyCardSkeleton'
 import { FilterPanel } from '@/components/property/FilterPanel'
 import { useProperties } from '@/features/properties/queries'
+import { useFavoriteActions } from '@/features/favorites/useFavoriteActions'
 import { useDebounce } from '@/hooks/useDebounce'
 import type { PropertyFilters } from '@/services/properties.service'
 
@@ -55,6 +56,7 @@ export default function HolidayHomes() {
   )
 
   const { data: properties, isLoading, isError } = useProperties(effectiveFilters)
+  const { isFavorited, handleToggle } = useFavoriteActions()
 
   function handleFilterChange(next: PropertyFilters) {
     setSearchParams(filtersToParams(next), { replace: true })
@@ -114,7 +116,12 @@ export default function HolidayHomes() {
               )}
 
               {properties?.map((property) => (
-                <PropertyCard key={property.id} property={property} />
+                <PropertyCard
+                  key={property.id}
+                  property={property}
+                  isFavorited={isFavorited(property.id)}
+                  onToggleFavorite={handleToggle}
+                />
               ))}
             </div>
           )}

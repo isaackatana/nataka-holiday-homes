@@ -115,7 +115,7 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
   const { data, error } = await supabase
     .from('properties')
     .select(
-      `${PROPERTY_SELECT}, amenities:property_amenities ( amenities ( id, name, icon ) )`,
+      `${PROPERTY_SELECT}, property_amenities ( amenities ( id, name, icon ) )`,
     )
     .eq('slug', slug)
     .eq('is_published', true)
@@ -125,5 +125,49 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
     if (error.code === 'PGRST116') return null
     throw error
   }
-  return data as unknown as Property
+
+  // property_amenities comes back as [{ amenities: {id,name,icon} }, ...]
+  // via the join — flatten it into Property.amenities so components don't
+  // need to know about the join table shape.
+  const raw = data as unknown as Property & {
+    property_amenities?: { amenities: { id: string; name: string; icon: string | null } }[]
+  }
+  const amenities = (raw.property_amenities ?? []).map((pa) => pa.amenities).filter(Boolean)
+  return { ...raw, amenities }
+}
+
+export async function getRelatedProperties(property: Property, limit = 3): Promise<Property[]> {
+  const { data, error } = await supabase
+    .from('properties')
+    .select(PROPERTY_SELECT)
+    .eq('is_published', true)
+    .eq('location', property.location)
+    .neq('id', property.id)
+    .limit(limit)
+
+  if (error) throw error
+  const results = (data ?? []) as unknown as Property[]
+
+  // Same location came up short (small catalog) — widen to same property
+  // type instead of showing nothing.
+  if (results.length < limit) {
+    const { data: typeMatches, error: typeError } = await supabase
+      .from('properties')
+      .select(PROPERTY_SELECT)
+      .eq('is_published', true)
+      .eq('property_type', property.property_type)
+      .neq('id', property.id)
+      .limit(limit)
+
+    if (typeError) throw typeError
+    const seen = new Set(results.map((p) => p.id))
+    for (const p of (typeMatches ?? []) as unknown as Property[]) {
+      if (!seen.has(p.id) && results.length < limit) {
+        results.push(p)
+        seen.add(p.id)
+      }
+    }
+  }
+
+  return results
 }

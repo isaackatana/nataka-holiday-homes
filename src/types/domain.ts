@@ -17,6 +17,7 @@ export interface Profile {
 }
 
 export type PropertyType = 'villa' | 'apartment' | 'cottage' | 'beach_house' | 'other'
+export type BookingStatus = 'pending' | 'contacted' | 'confirmed' | 'cancelled' | 'completed'
 
 export interface PropertyImage {
   id: string
