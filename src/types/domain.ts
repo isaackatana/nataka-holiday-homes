@@ -18,6 +18,7 @@ export interface Profile {
 
 export type PropertyType = 'villa' | 'apartment' | 'cottage' | 'beach_house' | 'other'
 export type BookingStatus = 'pending' | 'contacted' | 'confirmed' | 'cancelled' | 'completed'
+export type ReviewStatus = 'pending' | 'approved' | 'rejected'
 
 export interface PropertyImage {
   id: string
@@ -58,6 +59,10 @@ export interface Property {
   // raw column on the `properties` table itself.
   property_images?: PropertyImage[]
   amenities?: Amenity[]
+}
+
+export interface AdminPropertyDetail extends Property {
+  amenityIds: string[]
 }
 
 export interface Experience {

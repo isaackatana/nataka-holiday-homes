@@ -114,7 +114,12 @@ create index idx_booking_blocks_property_dates on booking_blocks (property_id, s
 -- =========================================================
 create table bookings (
   id uuid primary key default gen_random_uuid(),
-  property_id uuid not null references properties(id),
+  -- Nullable + SET NULL (not the NO ACTION default) so an admin can delete
+  -- a delisted property without being blocked by its enquiry history —
+  -- the booking row survives with property_id = null. The customer- and
+  -- admin-facing UIs both already handle a null joined property as
+  -- "Deleted property" rather than assuming it's always present.
+  property_id uuid references properties(id) on delete set null,
   customer_id uuid references profiles(id),
   guest_name text not null,
   guest_email text not null,
