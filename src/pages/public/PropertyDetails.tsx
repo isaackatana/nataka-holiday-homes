@@ -22,17 +22,21 @@ import { PropertyCard } from '@/components/property/PropertyCard'
 import { PropertyCardSkeleton } from '@/components/property/PropertyCardSkeleton'
 import { usePropertyBySlug, useRelatedProperties } from '@/features/properties/queries'
 import { useFavoriteActions } from '@/features/favorites/useFavoriteActions'
+import { useBusinessSettings } from '@/features/settings/queries'
 import { getPublicImageUrl } from '@/utils/storage'
 import { buildWhatsAppLink, buildPropertyEnquiryMessage } from '@/utils/whatsapp'
 
-const BUSINESS_PHONE_DISPLAY = '+254 700 000 000' // TODO: replace with the real business line
-const BUSINESS_PHONE_TEL = '+254700000000'
 
 export default function PropertyDetails() {
   const { slug } = useParams()
   const { data: property, isLoading, isError } = usePropertyBySlug(slug)
   const { data: related, isLoading: relatedLoading } = useRelatedProperties(property)
   const { isFavorited, handleToggle } = useFavoriteActions()
+  const { data: businessSettings } = useBusinessSettings()
+  const businessPhone = businessSettings?.contact_phone
+  // tel: links need digits/plus only — strip spaces from whatever an
+  // admin typed into Settings so "+254 700 000 000" still dials correctly.
+  const businessPhoneTel = businessPhone?.replace(/\s+/g, '')
   const [linkCopied, setLinkCopied] = useState(false)
 
   if (isLoading) {
@@ -203,16 +207,18 @@ export default function PropertyDetails() {
                   <MessageCircle className="h-4 w-4" />
                   WhatsApp
                 </a>
-                <a
-                  href={`tel:${BUSINESS_PHONE_TEL}`}
-                  className="flex items-center gap-2 rounded-full border border-teal-900 px-4 py-2.5 text-sm font-medium text-teal-900 hover:bg-teal-900 hover:text-sand-50"
-                >
-                  <Phone className="h-4 w-4" />
-                  Call
-                </a>
+                {businessPhoneTel && (
+                  <a
+                    href={`tel:${businessPhoneTel}`}
+                    className="flex items-center gap-2 rounded-full border border-teal-900 px-4 py-2.5 text-sm font-medium text-teal-900 hover:bg-teal-900 hover:text-sand-50"
+                  >
+                    <Phone className="h-4 w-4" />
+                    Call
+                  </a>
+                )}
               </div>
             </div>
-            <p className="-mt-6 text-xs text-charcoal-400">{BUSINESS_PHONE_DISPLAY}</p>
+            {businessPhone && <p className="-mt-6 text-xs text-charcoal-400">{businessPhone}</p>}
 
             <div>
               <h2 className="font-display text-xl font-medium text-teal-900">Reviews</h2>

@@ -1,6 +1,7 @@
 import { Outlet, Link, useNavigate } from 'react-router-dom'
 import { MessageCircle, Heart, CalendarCheck, User, LogOut } from 'lucide-react'
 import { useAuth } from '@/features/auth/AuthContext'
+import { useBusinessSettings } from '@/features/settings/queries'
 
 const NAV_LINKS = [
   { label: 'Holiday Homes', to: '/holiday-homes' },
@@ -16,6 +17,7 @@ const NAV_LINKS = [
  */
 export function PublicLayout() {
   const { user, profile, signOut } = useAuth()
+  const { data: settings } = useBusinessSettings()
   const navigate = useNavigate()
 
   async function handleSignOut() {
@@ -89,11 +91,21 @@ export function PublicLayout() {
       </main>
 
       <footer className="border-t border-sand-200 bg-teal-950 py-12 text-sand-100">
-        <div className="mx-auto max-w-7xl px-6">
-          <p className="font-display text-lg">Nataka Holiday Homes</p>
-          <p className="mt-2 max-w-md text-sm text-sand-300">
-            Villas, apartments and beach houses along Diani Beach and the Kenyan Coast.
-          </p>
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <p className="font-display text-lg">{settings?.business_name ?? 'Nataka Holiday Homes'}</p>
+            <p className="mt-2 max-w-md text-sm text-sand-300">
+              {settings?.about_blurb ??
+                'Villas, apartments and beach houses along Diani Beach and the Kenyan Coast.'}
+            </p>
+          </div>
+          {(settings?.contact_phone || settings?.contact_email || settings?.address) && (
+            <div className="flex flex-col gap-1 text-sm text-sand-300">
+              {settings.contact_phone && <span>{settings.contact_phone}</span>}
+              {settings.contact_email && <span>{settings.contact_email}</span>}
+              {settings.address && <span>{settings.address}</span>}
+            </div>
+          )}
         </div>
       </footer>
 

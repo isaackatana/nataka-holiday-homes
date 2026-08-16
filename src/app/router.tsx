@@ -9,6 +9,7 @@ import Home from '@/pages/public/Home'
 import HolidayHomes from '@/pages/public/HolidayHomes'
 import PropertyDetails from '@/pages/public/PropertyDetails'
 import Experiences from '@/pages/public/Experiences'
+import ExperienceDetails from '@/pages/public/ExperienceDetails'
 import About from '@/pages/public/About'
 import Contact from '@/pages/public/Contact'
 import NotFound from '@/pages/public/NotFound'
@@ -29,6 +30,7 @@ import AdminBookings from '@/pages/admin/Bookings'
 import AdminCustomers from '@/pages/admin/Customers'
 import AdminReviews from '@/pages/admin/Reviews'
 import AdminExperiences from '@/pages/admin/Experiences'
+import ExperienceEditor from '@/pages/admin/ExperienceEditor'
 import AdminSettings from '@/pages/admin/Settings'
 
 export const router = createBrowserRouter([
@@ -39,6 +41,7 @@ export const router = createBrowserRouter([
       { path: '/holiday-homes', element: <HolidayHomes /> },
       { path: '/stays/:slug', element: <PropertyDetails /> },
       { path: '/experiences', element: <Experiences /> },
+      { path: '/experiences/:slug', element: <ExperienceDetails /> },
       { path: '/about', element: <About /> },
       { path: '/contact', element: <Contact /> },
       {
@@ -80,6 +83,8 @@ export const router = createBrowserRouter([
           { path: 'customers', element: <AdminCustomers /> },
           { path: 'reviews', element: <AdminReviews /> },
           { path: 'experiences', element: <AdminExperiences /> },
+          { path: 'experiences/new', element: <ExperienceEditor /> },
+          { path: 'experiences/:id/edit', element: <ExperienceEditor /> },
           { path: 'settings', element: <AdminSettings /> },
         ],
       },
