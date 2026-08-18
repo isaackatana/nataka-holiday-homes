@@ -13,7 +13,11 @@ export default function MyBookings() {
 
   return (
     <div className="mx-auto w-full max-w-4xl px-6 py-12">
-      <SEO title="My Bookings" description="Your booking enquiries with Nataka Holiday Homes." />
+      <SEO
+        title="My Bookings"
+        description="Your booking enquiries with Nataka Holiday Homes."
+        noindex
+      />
 
       <h1 className="font-display text-3xl font-medium text-teal-900 md:text-4xl">My bookings</h1>
       <p className="mt-2 text-charcoal-500">Enquiries you've sent, and where they stand.</p>

@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, Clock, MapPin, MessageCircle } from 'lucide-react'
 import { SEO } from '@/components/shared/SEO'
+import { JsonLd } from '@/components/shared/JsonLd'
 import { useExperienceBySlug } from '@/features/experiences/queries'
 import { getPublicImageUrl } from '@/utils/storage'
 import { formatKES } from '@/utils/currency'
@@ -29,13 +30,35 @@ export default function ExperienceDetails() {
   const imageUrl = primaryImage ? getPublicImageUrl('experience-images', primaryImage.storage_path) : null
   const pageUrl = typeof window !== 'undefined' ? window.location.href : ''
 
+  const structuredData: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'TouristTrip',
+    name: experience.title,
+    description: experience.description,
+    url: pageUrl,
+    ...(imageUrl && { image: [imageUrl] }),
+    ...(experience.location && {
+      touristType: 'Leisure',
+      itinerary: { '@type': 'Place', name: experience.location },
+    }),
+    ...(experience.price !== null && {
+      offers: {
+        '@type': 'Offer',
+        priceCurrency: 'KES',
+        price: experience.price,
+      },
+    }),
+  }
+
   return (
     <div className="mx-auto max-w-4xl px-6 py-12">
       <SEO
         title={experience.title}
         description={experience.description.slice(0, 155)}
-        url={pageUrl}
+        path={`/experiences/${experience.slug}`}
+        image={imageUrl ?? undefined}
       />
+      <JsonLd data={structuredData} />
 
       <Link to="/experiences" className="flex items-center gap-1.5 text-sm text-charcoal-500 hover:text-teal-800">
         <ArrowLeft className="h-4 w-4" />

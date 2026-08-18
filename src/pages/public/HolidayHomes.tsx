@@ -67,6 +67,7 @@ export default function HolidayHomes() {
       <SEO
         title="Holiday Homes in Diani Beach"
         description="Browse villas, apartments, cottages and beach houses in Diani Beach and the Kenyan Coast. Filter by price, bedrooms, guests and amenities."
+        path="/holiday-homes"
       />
 
       <div className="flex items-end justify-between gap-4">

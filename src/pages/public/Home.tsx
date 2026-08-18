@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ShieldCheck, MessageCircle, MapPin, Sparkles, ArrowRight } from 'lucide-react'
 import { SEO } from '@/components/shared/SEO'
+import { JsonLd } from '@/components/shared/JsonLd'
 import { SectionHeading } from '@/components/shared/SectionHeading'
 import { SearchBar } from '@/components/property/SearchBar'
 import { PropertyCard } from '@/components/property/PropertyCard'
@@ -9,6 +10,7 @@ import { ExperienceCard } from '@/components/property/ExperienceCard'
 import { useFeaturedProperties } from '@/features/properties/queries'
 import { useExperiences } from '@/features/experiences/queries'
 import { useFavoriteActions } from '@/features/favorites/useFavoriteActions'
+import { useBusinessSettings } from '@/features/settings/queries'
 import { DESTINATIONS } from '@/data/destinations'
 import { WHY_CHOOSE_US, TESTIMONIALS } from '@/data/content'
 import { buildWhatsAppLink } from '@/utils/whatsapp'
@@ -19,12 +21,27 @@ export default function Home() {
   const { data: featuredProperties, isLoading: featuredLoading } = useFeaturedProperties(6)
   const { data: experiences, isLoading: experiencesLoading } = useExperiences(3)
   const { isFavorited, handleToggle } = useFavoriteActions()
+  const { data: businessSettings } = useBusinessSettings()
+  const socialLinks = [businessSettings?.instagram_url, businessSettings?.facebook_url].filter(
+    (url): url is string => !!url,
+  )
 
   return (
     <div className="flex flex-col">
       <SEO
         title="Villas & Beach Houses in Diani, Kenya"
         description="Premium villas, apartments and beach houses in Diani Beach, Kenya. Browse holiday homes, check availability and book your Kenyan Coast getaway."
+        path="/"
+      />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'Organization',
+          name: 'Nataka Holiday Homes',
+          url: 'https://natakaholidayhomes.com',
+          areaServed: 'Diani Beach, Kenya',
+          sameAs: socialLinks,
+        }}
       />
 
       {/* ---------------- HERO ---------------- */}

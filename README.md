@@ -1,32 +1,67 @@
 # Nataka Holiday Homes
 
 Full-stack holiday rental platform for Diani Beach & the Kenyan Coast.
-React + TypeScript + Vite + Tailwind CSS v4 + Supabase.
+React + TypeScript + Vite + Tailwind CSS v4 + Supabase, deployed on Vercel.
 
 ## Status
 
-Step 4 of the build plan complete: project scaffold, folder structure,
-design tokens, and the full route tree (public site, auth, account, admin)
-wired with placeholder pages. `npm run build` and `npm run lint` both pass.
+The full application is built: public site (home, listings with filters,
+property details, experiences, about, contact), customer accounts
+(favorites, bookings, profile), and the complete admin dashboard
+(properties + image upload, bookings, customers, reviews, experiences,
+settings). `npm run build` and `npm run lint` both pass.
 
-No Supabase project is connected yet — `src/lib/supabase.ts` will throw at
-runtime until you copy `.env.example` to `.env.local` and fill in your
-project's URL/anon key (Step 5/6/7).
+**Known gap:** experience photo uploads aren't wired up yet — admins can
+create/edit experience text fields, but there's no uploader for
+`experience_images` (the property image uploader isn't yet adapted for
+that table).
 
 ## Getting started
 
-\`\`\`bash
+```bash
 npm install
-cp .env.example .env.local   # fill in Supabase credentials once you have a project
+cp .env.example .env.local   # fill in Supabase credentials — see supabase/README.md
 npm run dev
-\`\`\`
+```
 
 ## Scripts
 
-- \`npm run dev\` — local dev server
-- \`npm run build\` — type-check (\`tsc -b\`) then production build
-- \`npm run lint\` — oxlint
-- \`npm run preview\` — preview the production build locally
+- `npm run dev` — local dev server
+- `npm run build` — regenerates `public/sitemap.xml`, then type-checks (`tsc -b`) and builds
+- `npm run sitemap` — regenerate `public/sitemap.xml` on its own
+- `npm run lint` — oxlint
+- `npm run preview` — preview the production build locally
+
+## SEO
+
+- `src/components/shared/SEO.tsx` — per-page `<title>`/description/OG/canonical
+  tags via `react-helmet-async`.
+- `src/components/shared/JsonLd.tsx` — schema.org structured data
+  (`LodgingBusiness` on property pages, `TouristTrip` on experience pages,
+  `Organization` on the homepage) for richer search results.
+- `scripts/generate-sitemap.mjs` — runs automatically before every build
+  (`prebuild` script). Queries Supabase for all published properties and
+  experiences and writes `public/sitemap.xml`. Fails soft: if Supabase
+  credentials aren't available (e.g. building locally without
+  `.env.local`), it writes a sitemap with just the static pages instead
+  of failing the build.
+- `api/prerender.js` + `vercel.json` — this is a client-rendered SPA, so
+  `react-helmet-async`'s OG tags only exist after the page's JS runs.
+  That's fine for Googlebot (which renders JS) but not for WhatsApp,
+  Facebook, Twitter, etc., whose link-preview crawlers read raw HTML and
+  never execute JavaScript — without this, sharing a property link on
+  WhatsApp would show a blank/generic preview. `vercel.json` rewrites
+  `/stays/:slug` and `/experiences/:slug` to `api/prerender.js`, but
+  **only** when the request's `User-Agent` matches a known non-JS
+  crawler; everything else still gets the normal SPA. The function
+  fetches the real title/description/photo from Supabase and returns
+  lightweight static HTML with correct meta tags. On any error (bad
+  slug, Supabase unreachable) it falls back to generic site-wide meta
+  rather than a broken response — this endpoint answers live link shares,
+  so a mediocre preview beats an error.
+  **Note:** the Supabase env vars need to be set in the Vercel project's
+  environment variables (not just locally in `.env.local`) for both the
+  Vite build and this serverless function to work once deployed.
 
 ## Architecture
 

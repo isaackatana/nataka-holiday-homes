@@ -1,4 +1,5 @@
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import {
   LayoutDashboard,
   Home,
@@ -38,6 +39,13 @@ export function AdminLayout() {
 
   return (
     <div className="flex min-h-screen bg-sand-100">
+      {/* Applies to every /admin/* route through this one shared layout,
+          rather than repeating a noindex <SEO> tag on ten separate admin
+          pages — the whole section is behind auth and has no reason to
+          appear in search results. */}
+      <Helmet>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <aside className="flex w-64 flex-col border-r border-sand-200 bg-teal-950 text-sand-100">
         <div className="px-6 py-6">
           <span className="font-display text-lg">Nataka Admin</span>

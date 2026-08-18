@@ -14,7 +14,11 @@ export default function Favorites() {
 
   return (
     <div className="mx-auto w-full max-w-7xl px-6 py-12">
-      <SEO title="Your Favorites" description="Properties you've saved at Nataka Holiday Homes." />
+      <SEO
+        title="Your Favorites"
+        description="Properties you've saved at Nataka Holiday Homes."
+        noindex
+      />
 
       <h1 className="font-display text-3xl font-medium text-teal-900 md:text-4xl">Your favorites</h1>
       <p className="mt-2 text-charcoal-500">Properties you've saved for later.</p>

@@ -1,7 +1,29 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/stays/:slug",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(facebookexternalhit|Facebot|Twitterbot|WhatsApp|LinkedInBot|Slackbot|TelegramBot|Discordbot|Pinterest|redditbot|SkypeUriPreview).*"
+        }
+      ],
+      "destination": "/api/prerender?type=property&slug=:slug"
+    },
+    {
+      "source": "/experiences/:slug",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(facebookexternalhit|Facebot|Twitterbot|WhatsApp|LinkedInBot|Slackbot|TelegramBot|Discordbot|Pinterest|redditbot|SkypeUriPreview).*"
+        }
+      ],
+      "destination": "/api/prerender?type=experience&slug=:slug"
+    },
+    {
+      "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
   ]

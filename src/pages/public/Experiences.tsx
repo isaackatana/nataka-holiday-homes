@@ -10,6 +10,7 @@ export default function Experiences() {
       <SEO
         title="Experiences on the Kenyan Coast"
         description="Dolphin tours, snorkeling, skydiving, safaris and airport transfers around Diani Beach and the Kenyan Coast."
+        path="/experiences"
       />
 
       <h1 className="font-display text-3xl font-medium text-teal-900 md:text-4xl">Experiences</h1>

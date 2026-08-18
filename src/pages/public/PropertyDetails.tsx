@@ -13,6 +13,7 @@ import {
   Clock,
 } from 'lucide-react'
 import { SEO } from '@/components/shared/SEO'
+import { JsonLd } from '@/components/shared/JsonLd'
 import { Gallery } from '@/components/property/Gallery'
 import { AmenitiesList } from '@/components/property/AmenitiesList'
 import { PropertyMap } from '@/components/property/PropertyMap'
@@ -21,6 +22,7 @@ import { ReviewsSection } from '@/components/property/ReviewsSection'
 import { PropertyCard } from '@/components/property/PropertyCard'
 import { PropertyCardSkeleton } from '@/components/property/PropertyCardSkeleton'
 import { usePropertyBySlug, useRelatedProperties } from '@/features/properties/queries'
+import { useApprovedReviews } from '@/features/reviews/queries'
 import { useFavoriteActions } from '@/features/favorites/useFavoriteActions'
 import { useBusinessSettings } from '@/features/settings/queries'
 import { getPublicImageUrl } from '@/utils/storage'
@@ -33,6 +35,11 @@ export default function PropertyDetails() {
   const { data: related, isLoading: relatedLoading } = useRelatedProperties(property)
   const { isFavorited, handleToggle } = useFavoriteActions()
   const { data: businessSettings } = useBusinessSettings()
+  // Called unconditionally (Rules of Hooks) even though property may still
+  // be loading — `enabled: !!propertyId` inside the hook itself handles
+  // that, and this reuses the same React Query cache entry ReviewsSection
+  // populates below, so it's not a second network round trip.
+  const { data: approvedReviews } = useApprovedReviews(property?.id)
   const businessPhone = businessSettings?.contact_phone
   // tel: links need digits/plus only — strip spaces from whatever an
   // admin typed into Settings so "+254 700 000 000" still dials correctly.
@@ -68,6 +75,48 @@ export default function PropertyDetails() {
   const primaryImagePath = property.property_images?.find((i) => i.is_primary)?.storage_path
   const primaryImageUrl = primaryImagePath ? getPublicImageUrl('property-images', primaryImagePath) : undefined
 
+  const averageRating =
+    approvedReviews && approvedReviews.length > 0
+      ? approvedReviews.reduce((sum, r) => sum + r.rating, 0) / approvedReviews.length
+      : undefined
+
+  const structuredData: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'LodgingBusiness',
+    name: property.title,
+    description: property.description,
+    url: propertyUrl,
+    ...(primaryImageUrl && { image: [primaryImageUrl] }),
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: property.location,
+      addressCountry: 'KE',
+    },
+    ...(property.latitude &&
+      property.longitude && {
+        geo: {
+          '@type': 'GeoCoordinates',
+          latitude: property.latitude,
+          longitude: property.longitude,
+        },
+      }),
+    priceRange: `KES ${property.price_per_night} per night`,
+    ...(property.amenities &&
+      property.amenities.length > 0 && {
+        amenityFeature: property.amenities.map((a) => ({
+          '@type': 'LocationFeatureSpecification',
+          name: a.name,
+        })),
+      }),
+    ...(averageRating !== undefined && {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: averageRating.toFixed(1),
+        reviewCount: approvedReviews!.length,
+      },
+    }),
+  }
+
   async function handleShare() {
     if (navigator.share) {
       try {
@@ -91,9 +140,10 @@ export default function PropertyDetails() {
       <SEO
         title={property.title}
         description={property.description.slice(0, 155)}
-        url={propertyUrl}
+        path={`/stays/${property.slug}`}
         image={primaryImageUrl}
       />
+      <JsonLd data={structuredData} />
 
       <div className="mx-auto max-w-7xl px-6 pt-8">
         <Gallery images={property.property_images ?? []} title={property.title} />
