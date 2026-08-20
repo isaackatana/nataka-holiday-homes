@@ -1,14 +1,13 @@
 import { Helmet } from 'react-helmet-async'
-
-const SITE_URL = 'https://natakaholidayhomes.com' // update once the real domain is live
+import { SITE_ORIGIN } from '@/utils/siteUrl'
 
 interface SEOProps {
   title: string
   description: string
   image?: string
   /** Path only (e.g. "/stays/azure-reef-villa-diani"), not a full URL —
-   * SEO builds the canonical/OG URL from this + SITE_URL, so callers
-   * don't each need to know the site's domain. */
+   * SEO builds the canonical/OG URL from this + the site's own origin, so
+   * callers don't each need to know or hardcode the domain. */
   path?: string
   type?: 'website' | 'article'
   /** Pages behind auth (favorites, my-bookings, profile, all of /admin)
@@ -17,14 +16,15 @@ interface SEOProps {
   noindex?: boolean
 }
 
-/** Per-page title/description/OG tags. See the architecture doc §1 for
- * why this is client-side only for now (build-time prerendering for
- * property pages specifically — better WhatsApp/Facebook link previews —
- * remains a follow-up beyond this pass, noted there and in supabase/README.md
- * if you want to pick it up later). */
+/** Per-page title/description/OG tags via react-helmet-async — sets these
+ * correctly for JS-executing crawlers (Googlebot) and regular browsers.
+ * Non-JS-executing social crawlers (WhatsApp, Facebook, Twitter, etc.)
+ * never run this — they're served by api/prerender.js instead, routed
+ * there by vercel.json based on User-Agent. See supabase/README.md and
+ * that file's own comments for how the two fit together. */
 export function SEO({ title, description, image, path, type = 'website', noindex }: SEOProps) {
   const fullTitle = `${title} | Nataka Holiday Homes`
-  const url = path ? `${SITE_URL}${path}` : undefined
+  const url = path ? `${SITE_ORIGIN}${path}` : undefined
 
   return (
     <Helmet>

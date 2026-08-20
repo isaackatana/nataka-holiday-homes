@@ -15,6 +15,7 @@ import {
 } from '@/features/admin/experiences/queries'
 import { experienceSchema, type ExperienceFormValues } from '@/features/admin/experiences/schemas'
 import { slugify } from '@/utils/slugify'
+import { ExperienceImageUploader } from '@/components/admin/ExperienceImageUploader'
 
 export default function ExperienceEditor() {
   const { id } = useParams()
@@ -135,6 +136,19 @@ export default function ExperienceEditor() {
           </Button>
         </div>
       </form>
+
+      <div className="mt-8">
+        {isEditing && existing ? (
+          <ExperienceImageUploader
+            experienceId={existing.id}
+            images={existing.experience_images ?? []}
+          />
+        ) : (
+          <div className="rounded-card border border-dashed border-sand-300 bg-sand-100 p-6 text-center text-sm text-charcoal-500">
+            Save this experience first, then come back to add photos.
+          </div>
+        )}
+      </div>
     </div>
   )
 }

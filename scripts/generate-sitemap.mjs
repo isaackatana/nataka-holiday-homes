@@ -15,11 +15,20 @@ import { dirname, join } from 'node:path'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const OUTPUT_PATH = join(__dirname, '..', 'public', 'sitemap.xml')
 
-// Update this once the real domain is live — also update SITE_URL in
-// src/components/shared/SEO.tsx to match, the two aren't read from a
-// shared config since one runs in Node at build time and the other in
-// the browser bundle.
-const SITE_URL = 'https://natakaholidayhomes.com'
+// The real domain, used to build absolute URLs in the sitemap. Node has
+// no `window.location` (unlike the browser-side src/utils/siteUrl.ts), so
+// this can't self-detect the origin — it needs an explicit value. Reads
+// from the SITE_URL env var (set this in Vercel's project settings
+// alongside the Supabase vars) and falls back to a placeholder if unset,
+// so a local build without it configured still produces a valid sitemap
+// rather than failing outright.
+const SITE_URL = process.env.SITE_URL || 'https://natakaholidayhomes.com'
+if (!process.env.SITE_URL) {
+  console.warn(
+    `[sitemap] SITE_URL env var not set — using placeholder "${SITE_URL}". ` +
+      'Set SITE_URL in Vercel project settings once the real domain is live.',
+  )
+}
 
 const STATIC_PATHS = [
   { path: '/', changefreq: 'weekly', priority: 1.0 },

@@ -8,13 +8,8 @@ React + TypeScript + Vite + Tailwind CSS v4 + Supabase, deployed on Vercel.
 The full application is built: public site (home, listings with filters,
 property details, experiences, about, contact), customer accounts
 (favorites, bookings, profile), and the complete admin dashboard
-(properties + image upload, bookings, customers, reviews, experiences,
-settings). `npm run build` and `npm run lint` both pass.
-
-**Known gap:** experience photo uploads aren't wired up yet — admins can
-create/edit experience text fields, but there's no uploader for
-`experience_images` (the property image uploader isn't yet adapted for
-that table).
+(properties + image upload, bookings, customers, reviews, experiences +
+image upload, settings). `npm run build` and `npm run lint` both pass.
 
 ## Getting started
 
@@ -62,6 +57,12 @@ npm run dev
   **Note:** the Supabase env vars need to be set in the Vercel project's
   environment variables (not just locally in `.env.local`) for both the
   Vite build and this serverless function to work once deployed.
+
+## Deployment
+
+See `DEPLOYMENT.md` for the full Vercel checklist — environment
+variables, build settings, and a post-deploy verification list (including
+how to check social link previews, which can't be tested locally).
 
 ## Architecture
 

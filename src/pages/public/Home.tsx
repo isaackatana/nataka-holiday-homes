@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { ShieldCheck, MessageCircle, MapPin, Sparkles, ArrowRight } from 'lucide-react'
 import { SEO } from '@/components/shared/SEO'
 import { JsonLd } from '@/components/shared/JsonLd'
+import { SITE_ORIGIN } from '@/utils/siteUrl'
 import { SectionHeading } from '@/components/shared/SectionHeading'
 import { SearchBar } from '@/components/property/SearchBar'
 import { PropertyCard } from '@/components/property/PropertyCard'
@@ -38,7 +39,7 @@ export default function Home() {
           '@context': 'https://schema.org',
           '@type': 'Organization',
           name: 'Nataka Holiday Homes',
-          url: 'https://natakaholidayhomes.com',
+          url: SITE_ORIGIN,
           areaServed: 'Diani Beach, Kenya',
           sameAs: socialLinks,
         }}

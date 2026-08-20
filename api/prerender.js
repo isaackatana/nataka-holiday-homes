@@ -20,7 +20,11 @@
 // a page that's actively being shared right now.
 import { createClient } from '@supabase/supabase-js'
 
-const SITE_URL = 'https://natakaholidayhomes.com'
+// See scripts/generate-sitemap.mjs for why this reads an env var instead
+// of self-detecting like the browser-side src/utils/siteUrl.ts does —
+// this runs in Node with no window.location. Set SITE_URL in Vercel's
+// project settings once the real domain is live.
+const SITE_URL = process.env.SITE_URL || 'https://natakaholidayhomes.com'
 const SITE_NAME = 'Nataka Holiday Homes'
 const DEFAULT_DESCRIPTION =
   'Premium villas, apartments and beach houses in Diani Beach, Kenya.'

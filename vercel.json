@@ -23,7 +23,7 @@
       "destination": "/api/prerender?type=experience&slug=:slug"
     },
     {
-      "source": "/((?!api/).*)",
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ]
