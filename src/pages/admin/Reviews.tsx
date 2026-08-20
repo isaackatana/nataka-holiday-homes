@@ -38,7 +38,7 @@ export default function AdminReviews() {
   }
 
   return (
-    <div className="px-8 py-8">
+    <div className="px-4 py-6 sm:px-8 sm:py-8">
       <h1 className="font-display text-2xl font-medium text-teal-900">Reviews</h1>
       <p className="mt-1 text-sm text-charcoal-500">
         Only approved reviews show on property pages — new reviews start as pending.

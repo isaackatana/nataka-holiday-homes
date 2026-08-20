@@ -18,7 +18,7 @@ export default function Dashboard() {
   const { data: popular, isLoading: popularLoading } = usePopularProperties(5)
 
   return (
-    <div className="px-8 py-8">
+    <div className="px-4 py-6 sm:px-8 sm:py-8">
       <h1 className="font-display text-2xl font-medium text-teal-900">Dashboard</h1>
       <p className="mt-1 text-sm text-charcoal-500">An overview of Nataka Holiday Homes right now.</p>
 

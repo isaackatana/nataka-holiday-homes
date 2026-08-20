@@ -1,11 +1,8 @@
 import { Link } from 'react-router-dom'
 import { SEO } from '@/components/shared/SEO'
 import { SectionHeading } from '@/components/shared/SectionHeading'
-import { WHY_CHOOSE_US } from '@/data/content'
+import { WHY_CHOOSE_US, WHY_CHOOSE_US_ICONS } from '@/data/content'
 import { useBusinessSettings } from '@/features/settings/queries'
-import { ShieldCheck, MessageCircle, MapPin, Sparkles } from 'lucide-react'
-
-const ICONS = { 'shield-check': ShieldCheck, 'message-circle': MessageCircle, 'map-pin': MapPin, sparkles: Sparkles }
 
 export default function About() {
   const { data: settings } = useBusinessSettings()
@@ -44,7 +41,7 @@ export default function About() {
       <SectionHeading eyebrow="Why Nataka" title="What guests can expect" />
       <div className="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2">
         {WHY_CHOOSE_US.map((item) => {
-          const Icon = ICONS[item.icon]
+          const Icon = WHY_CHOOSE_US_ICONS[item.icon]
           return (
             <div key={item.title} className="flex items-start gap-4">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-teal-900/10">

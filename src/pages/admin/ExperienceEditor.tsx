@@ -84,11 +84,11 @@ export default function ExperienceEditor() {
   }
 
   if (isEditing && loadingExisting) {
-    return <div className="px-8 py-8 text-charcoal-500">Loading...</div>
+    return <div className="px-4 py-6 sm:px-8 sm:py-8 text-charcoal-500">Loading...</div>
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-8 py-8">
+    <div className="mx-auto max-w-2xl px-4 py-6 sm:px-8 sm:py-8">
       <Link to="/admin/experiences" className="flex items-center gap-1.5 text-sm text-charcoal-500 hover:text-teal-800">
         <ArrowLeft className="h-4 w-4" />
         Back to experiences

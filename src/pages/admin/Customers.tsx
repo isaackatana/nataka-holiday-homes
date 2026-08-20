@@ -28,7 +28,7 @@ export default function AdminCustomers() {
   }
 
   return (
-    <div className="px-8 py-8">
+    <div className="px-4 py-6 sm:px-8 sm:py-8">
       <h1 className="font-display text-2xl font-medium text-teal-900">Customers</h1>
       <p className="mt-1 text-sm text-charcoal-500">
         {customers?.length ?? 0} registered user{customers?.length === 1 ? '' : 's'}.
@@ -42,8 +42,8 @@ export default function AdminCustomers() {
         className="mt-4 w-full rounded-lg border border-sand-300 bg-sand-50 px-4 py-2 text-sm text-charcoal-900 outline-none placeholder:text-charcoal-300 focus:border-teal-700 sm:w-72"
       />
 
-      <div className="mt-6 overflow-hidden rounded-card border border-sand-200 bg-sand-50">
-        <table className="w-full text-left text-sm">
+      <div className="mt-6 overflow-x-auto rounded-card border border-sand-200 bg-sand-50">
+        <table className="w-full min-w-[640px] text-left text-sm">
           <thead className="border-b border-sand-200 bg-sand-100 text-xs uppercase tracking-wide text-charcoal-500">
             <tr>
               <th className="px-4 py-3 font-medium">Name</th>

@@ -48,11 +48,11 @@ export default function AdminSettings() {
   }
 
   if (isLoading) {
-    return <div className="px-8 py-8 text-charcoal-500">Loading...</div>
+    return <div className="px-4 py-6 sm:px-8 sm:py-8 text-charcoal-500">Loading...</div>
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-8 py-8">
+    <div className="mx-auto max-w-2xl px-4 py-6 sm:px-8 sm:py-8">
       <h1 className="font-display text-2xl font-medium text-teal-900">Settings</h1>
       <p className="mt-1 text-sm text-charcoal-500">
         Business info shown across the public site — contact details, address, and about text.

@@ -1,7 +1,19 @@
+import { ShieldCheck, MessageCircle, MapPin, Sparkles, type LucideIcon } from 'lucide-react'
+
 export interface WhyChooseUsItem {
   title: string
   description: string
   icon: 'shield-check' | 'message-circle' | 'map-pin' | 'sparkles'
+}
+
+// Shared between Home.tsx and About.tsx — both render WHY_CHOOSE_US with
+// the same icon-per-item mapping, so this lives once here rather than as
+// two independently-maintained copies of the same lookup object.
+export const WHY_CHOOSE_US_ICONS: Record<WhyChooseUsItem['icon'], LucideIcon> = {
+  'shield-check': ShieldCheck,
+  'message-circle': MessageCircle,
+  'map-pin': MapPin,
+  sparkles: Sparkles,
 }
 
 export const WHY_CHOOSE_US: WhyChooseUsItem[] = [

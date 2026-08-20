@@ -134,14 +134,14 @@ export default function PropertyEditor() {
 
   if (isEditing && propertyLoading) {
     return (
-      <div className="px-8 py-8">
+      <div className="px-4 py-6 sm:px-8 sm:py-8">
         <div className="h-96 animate-pulse rounded-card bg-sand-200" />
       </div>
     )
   }
 
   return (
-    <div className="px-8 py-8">
+    <div className="px-4 py-6 sm:px-8 sm:py-8">
       <h1 className="font-display text-2xl font-medium text-teal-900">
         {isEditing ? 'Edit property' : 'New property'}
       </h1>

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import {
@@ -9,13 +10,18 @@ import {
   Compass,
   Settings,
   LogOut,
+  Mail,
+  Menu,
+  X,
 } from 'lucide-react'
 import { useAuth } from '@/features/auth/AuthContext'
+import { useAdminContactMessages } from '@/features/admin/contactMessages/queries'
 
 const NAV_ITEMS = [
   { label: 'Dashboard', to: '/admin', icon: LayoutDashboard },
   { label: 'Properties', to: '/admin/properties', icon: Home },
   { label: 'Bookings', to: '/admin/bookings', icon: CalendarCheck },
+  { label: 'Messages', to: '/admin/messages', icon: Mail },
   { label: 'Customers', to: '/admin/customers', icon: Users },
   { label: 'Reviews', to: '/admin/reviews', icon: Star },
   { label: 'Experiences', to: '/admin/experiences', icon: Compass },
@@ -31,10 +37,43 @@ export function AdminLayout() {
   const location = useLocation()
   const { profile, signOut } = useAuth()
   const navigate = useNavigate()
+  const { data: unreadMessages } = useAdminContactMessages({ unreadOnly: true })
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
+
+  useEffect(() => {
+    setMobileNavOpen(false)
+  }, [location.pathname])
 
   async function handleSignOut() {
     await signOut()
     navigate('/')
+  }
+
+  // Shared between the always-visible desktop sidebar and the mobile
+  // slide-over drawer, so the two can't drift out of sync with each other.
+  function renderNavItems() {
+    return NAV_ITEMS.map(({ label, to, icon: Icon }) => {
+      const isActive = location.pathname === to
+      return (
+        <Link
+          key={to}
+          to={to}
+          className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+            isActive
+              ? 'bg-teal-800 text-sand-50'
+              : 'text-sand-300 hover:bg-teal-900 hover:text-sand-50'
+          }`}
+        >
+          <Icon className="h-4 w-4" />
+          {label}
+          {to === '/admin/messages' && (unreadMessages?.length ?? 0) > 0 && (
+            <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-pill bg-gold-500 px-1.5 font-mono text-[10px] text-sand-50">
+              {unreadMessages!.length}
+            </span>
+          )}
+        </Link>
+      )
+    })
   }
 
   return (
@@ -46,45 +85,65 @@ export function AdminLayout() {
       <Helmet>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
-      <aside className="flex w-64 flex-col border-r border-sand-200 bg-teal-950 text-sand-100">
+
+      {/* Desktop sidebar — persistent, hidden below md */}
+      <aside className="hidden w-64 flex-col border-r border-sand-200 bg-teal-950 text-sand-100 md:flex">
         <div className="px-6 py-6">
           <span className="font-display text-lg">Nataka Admin</span>
         </div>
-        <nav className="flex flex-1 flex-col gap-1 px-3">
-          {NAV_ITEMS.map(({ label, to, icon: Icon }) => {
-            const isActive = location.pathname === to
-            return (
-              <Link
-                key={to}
-                to={to}
-                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                  isActive
-                    ? 'bg-teal-800 text-sand-50'
-                    : 'text-sand-300 hover:bg-teal-900 hover:text-sand-50'
-                }`}
-              >
-                <Icon className="h-4 w-4" />
-                {label}
-              </Link>
-            )
-          })}
-        </nav>
+        <nav className="flex flex-1 flex-col gap-1 px-3">{renderNavItems()}</nav>
       </aside>
 
-      <div className="flex-1">
-        <header className="flex items-center justify-between border-b border-sand-200 bg-sand-50 px-8 py-4">
-          <p className="font-mono text-xs uppercase tracking-[0.15em] text-charcoal-500">
-            Admin
-          </p>
-          <div className="flex items-center gap-4 text-sm text-charcoal-700">
-            <span>{profile?.full_name ?? 'Admin'}</span>
+      {/* Mobile nav — overlay + slide-over drawer, same interaction
+          pattern as PublicLayout's mobile menu and FilterPanel's mobile
+          drawer, for consistency across the app. */}
+      {mobileNavOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-charcoal-900/40 md:hidden"
+          onClick={() => setMobileNavOpen(false)}
+        />
+      )}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-teal-950 text-sand-100 transition-transform duration-300 md:hidden ${
+          mobileNavOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        <div className="flex items-center justify-between px-6 py-6">
+          <span className="font-display text-lg">Nataka Admin</span>
+          <button
+            onClick={() => setMobileNavOpen(false)}
+            aria-label="Close menu"
+            className="text-sand-300 hover:text-sand-50"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+        <nav className="flex flex-1 flex-col gap-1 px-3">{renderNavItems()}</nav>
+      </aside>
+
+      <div className="min-w-0 flex-1">
+        <header className="flex items-center justify-between border-b border-sand-200 bg-sand-50 px-4 py-4 sm:px-8">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setMobileNavOpen(true)}
+              aria-label="Open menu"
+              className="text-charcoal-700 md:hidden"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+            <p className="font-mono text-xs uppercase tracking-[0.15em] text-charcoal-500">
+              Admin
+            </p>
+          </div>
+          <div className="flex items-center gap-2 text-sm text-charcoal-700 sm:gap-4">
+            <span className="hidden sm:inline">{profile?.full_name ?? 'Admin'}</span>
             <button
               onClick={handleSignOut}
               aria-label="Sign out"
               className="flex items-center gap-1.5 text-charcoal-500 transition-colors hover:text-coral-500"
             >
               <LogOut className="h-4 w-4" />
-              Sign out
+              <span className="hidden sm:inline">Sign out</span>
             </button>
           </div>
         </header>

@@ -18,7 +18,7 @@ export default function AdminExperiences() {
   }
 
   return (
-    <div className="px-8 py-8">
+    <div className="px-4 py-6 sm:px-8 sm:py-8">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display text-2xl font-medium text-teal-900">Experiences</h1>
@@ -35,8 +35,8 @@ export default function AdminExperiences() {
         </Link>
       </div>
 
-      <div className="mt-6 overflow-hidden rounded-card border border-sand-200 bg-sand-50">
-        <table className="w-full text-left text-sm">
+      <div className="mt-6 overflow-x-auto rounded-card border border-sand-200 bg-sand-50">
+        <table className="w-full min-w-[640px] text-left text-sm">
           <thead className="border-b border-sand-200 bg-sand-100 text-xs uppercase tracking-wide text-charcoal-500">
             <tr>
               <th className="px-4 py-3 font-medium">Title</th>

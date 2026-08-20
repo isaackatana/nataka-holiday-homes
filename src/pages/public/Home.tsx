@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ShieldCheck, MessageCircle, MapPin, Sparkles, ArrowRight } from 'lucide-react'
+import { ArrowRight, MessageCircle } from 'lucide-react'
 import { SEO } from '@/components/shared/SEO'
 import { JsonLd } from '@/components/shared/JsonLd'
 import { SITE_ORIGIN } from '@/utils/siteUrl'
@@ -13,10 +13,8 @@ import { useExperiences } from '@/features/experiences/queries'
 import { useFavoriteActions } from '@/features/favorites/useFavoriteActions'
 import { useBusinessSettings } from '@/features/settings/queries'
 import { DESTINATIONS } from '@/data/destinations'
-import { WHY_CHOOSE_US, TESTIMONIALS } from '@/data/content'
+import { WHY_CHOOSE_US, WHY_CHOOSE_US_ICONS, TESTIMONIALS } from '@/data/content'
 import { buildWhatsAppLink } from '@/utils/whatsapp'
-
-const ICONS = { 'shield-check': ShieldCheck, 'message-circle': MessageCircle, 'map-pin': MapPin, sparkles: Sparkles }
 
 export default function Home() {
   const { data: featuredProperties, isLoading: featuredLoading } = useFeaturedProperties(6)
@@ -125,7 +123,7 @@ export default function Home() {
           />
           <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {WHY_CHOOSE_US.map((item) => {
-              const Icon = ICONS[item.icon]
+              const Icon = WHY_CHOOSE_US_ICONS[item.icon]
               return (
                 <div key={item.title} className="flex flex-col items-start gap-3">
                   <div className="flex h-11 w-11 items-center justify-center rounded-full bg-teal-800">
