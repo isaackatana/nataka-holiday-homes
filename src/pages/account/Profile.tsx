@@ -50,7 +50,7 @@ export default function Profile() {
 
   return (
     <div className="mx-auto w-full max-w-lg px-6 py-12">
-      <SEO title="Your Profile" description="Manage your Nataka Holiday Homes account." noindex />
+      <SEO title="Your Profile" description="Manage your Nataka Holidays account." noindex />
 
       <h1 className="font-display text-3xl font-medium text-teal-900">Your profile</h1>
       <p className="mt-2 text-charcoal-500">Update your name and phone number.</p>

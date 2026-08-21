@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '@/features/auth/AuthContext'
 import { useAdminContactMessages } from '@/features/admin/contactMessages/queries'
+import { useDialogA11y } from '@/hooks/useDialogA11y'
 
 const NAV_ITEMS = [
   { label: 'Dashboard', to: '/admin', icon: LayoutDashboard },
@@ -39,6 +40,7 @@ export function AdminLayout() {
   const navigate = useNavigate()
   const { data: unreadMessages } = useAdminContactMessages({ unreadOnly: true })
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
+  const mobileNavRef = useDialogA11y<HTMLElement>(mobileNavOpen, () => setMobileNavOpen(false))
 
   useEffect(() => {
     setMobileNavOpen(false)
@@ -89,7 +91,7 @@ export function AdminLayout() {
       {/* Desktop sidebar — persistent, hidden below md */}
       <aside className="hidden w-64 flex-col border-r border-sand-200 bg-teal-950 text-sand-100 md:flex">
         <div className="px-6 py-6">
-          <span className="font-display text-lg">Nataka Admin</span>
+          <span className="font-display text-lg">Nataka Holidays</span>
         </div>
         <nav className="flex flex-1 flex-col gap-1 px-3">{renderNavItems()}</nav>
       </aside>
@@ -104,12 +106,16 @@ export function AdminLayout() {
         />
       )}
       <aside
+        ref={mobileNavRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Admin navigation"
         className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-teal-950 text-sand-100 transition-transform duration-300 md:hidden ${
           mobileNavOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="flex items-center justify-between px-6 py-6">
-          <span className="font-display text-lg">Nataka Admin</span>
+          <span className="font-display text-lg">Nataka Holidays</span>
           <button
             onClick={() => setMobileNavOpen(false)}
             aria-label="Close menu"

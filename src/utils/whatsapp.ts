@@ -14,9 +14,9 @@ export function buildWhatsAppLink(message: string): string {
 }
 
 export function buildPropertyEnquiryMessage(propertyTitle: string, propertyUrl: string): string {
-  return `Hello Nataka Holiday Homes, I am interested in ${propertyTitle}. ${propertyUrl}`
+  return `Hello Nataka Holidays, I am interested in ${propertyTitle}. ${propertyUrl}`
 }
 
 export function buildExperienceEnquiryMessage(experienceTitle: string, experienceUrl: string): string {
-  return `Hello Nataka Holiday Homes, I am interested in the ${experienceTitle} experience. ${experienceUrl}`
+  return `Hello Nataka Holidays, I am interested in the ${experienceTitle} experience. ${experienceUrl}`
 }

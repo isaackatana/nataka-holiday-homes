@@ -31,7 +31,7 @@ export default function Contact() {
     <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-12 px-6 py-12 lg:grid-cols-[1fr_1.2fr]">
       <SEO
         title="Contact Us"
-        description="Get in touch with Nataka Holiday Homes about a stay, a booking enquiry, or general questions about Diani Beach."
+        description="Get in touch with Nataka Holidays about a stay, a booking enquiry, or general questions about Diani Beach."
         path="/contact"
       />
 
@@ -68,7 +68,7 @@ export default function Contact() {
             </span>
           )}
           <a
-            href={buildWhatsAppLink('Hello Nataka Holiday Homes, I have a question.')}
+            href={buildWhatsAppLink('Hello Nataka Holidays, I have a question.')}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-2 flex w-fit items-center gap-2 rounded-full bg-teal-900 px-5 py-2.5 text-sm font-medium text-sand-50 hover:bg-teal-800"

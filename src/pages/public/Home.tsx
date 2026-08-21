@@ -36,7 +36,7 @@ export default function Home() {
         data={{
           '@context': 'https://schema.org',
           '@type': 'Organization',
-          name: 'Nataka Holiday Homes',
+          name: 'Nataka Holidays',
           url: SITE_ORIGIN,
           areaServed: 'Diani Beach, Kenya',
           sameAs: socialLinks,
@@ -219,7 +219,7 @@ export default function Home() {
             </p>
           </div>
           <a
-            href={buildWhatsAppLink('Hello Nataka Holiday Homes, I would like help choosing a property.')}
+            href={buildWhatsAppLink('Hello Nataka Holidays, I would like help choosing a property.')}
             target="_blank"
             rel="noopener noreferrer"
             className="flex shrink-0 items-center gap-2 rounded-full bg-teal-950 px-6 py-3 text-sm font-medium text-sand-50 transition-transform hover:scale-105"

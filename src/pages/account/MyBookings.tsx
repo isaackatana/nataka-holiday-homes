@@ -15,7 +15,7 @@ export default function MyBookings() {
     <div className="mx-auto w-full max-w-4xl px-6 py-12">
       <SEO
         title="My Bookings"
-        description="Your booking enquiries with Nataka Holiday Homes."
+        description="Your booking enquiries with Nataka Holidays."
         noindex
       />
 

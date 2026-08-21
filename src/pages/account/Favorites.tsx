@@ -16,7 +16,7 @@ export default function Favorites() {
     <div className="mx-auto w-full max-w-7xl px-6 py-12">
       <SEO
         title="Your Favorites"
-        description="Properties you've saved at Nataka Holiday Homes."
+        description="Properties you've saved at Nataka Holidays."
         noindex
       />
 

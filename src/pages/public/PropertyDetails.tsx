@@ -242,7 +242,7 @@ export default function PropertyDetails() {
 
             <div className="flex flex-col gap-3 rounded-card bg-sand-100 p-6 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h3 className="font-display text-lg font-medium text-teal-900">Managed by Nataka Holiday Homes</h3>
+                <h3 className="font-display text-lg font-medium text-teal-900">Managed by Nataka Holidays</h3>
                 <p className="mt-1 text-sm text-charcoal-500">
                   Local guest services, verified listings, real people on WhatsApp.
                 </p>

@@ -23,7 +23,7 @@ interface SEOProps {
  * there by vercel.json based on User-Agent. See supabase/README.md and
  * that file's own comments for how the two fit together. */
 export function SEO({ title, description, image, path, type = 'website', noindex }: SEOProps) {
-  const fullTitle = `${title} | Nataka Holiday Homes`
+  const fullTitle = `${title} | Nataka Holidays`
   const url = path ? `${SITE_ORIGIN}${path}` : undefined
 
   return (

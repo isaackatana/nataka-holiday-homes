@@ -4,6 +4,7 @@ import { MessageCircle, Heart, CalendarCheck, User, LogOut, Menu, X } from 'luci
 import { useAuth } from '@/features/auth/AuthContext'
 import { useBusinessSettings } from '@/features/settings/queries'
 import { buildWhatsAppLink } from '@/utils/whatsapp'
+import { useDialogA11y } from '@/hooks/useDialogA11y'
 
 const NAV_LINKS = [
   { label: 'Holiday Homes', to: '/holiday-homes' },
@@ -23,6 +24,7 @@ export function PublicLayout() {
   const navigate = useNavigate()
   const location = useLocation()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const mobileMenuRef = useDialogA11y<HTMLElement>(mobileMenuOpen, () => setMobileMenuOpen(false))
 
   // Close the mobile menu automatically on navigation — otherwise it'd
   // stay open over the new page after tapping a link inside it.
@@ -40,7 +42,7 @@ export function PublicLayout() {
       <header className="sticky top-0 z-40 border-b border-sand-200 bg-sand-50/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <Link to="/" className="font-display text-xl font-medium text-teal-900">
-            Nataka Holiday Homes
+            Nataka Holidays
           </Link>
           <nav className="hidden gap-8 md:flex">
             {NAV_LINKS.map((link) => (
@@ -115,6 +117,10 @@ export function PublicLayout() {
         />
       )}
       <aside
+        ref={mobileMenuRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menu"
         className={`fixed inset-y-0 right-0 z-[60] w-72 overflow-y-auto bg-sand-50 p-6 shadow-card-hover transition-transform duration-300 md:hidden ${
           mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
@@ -192,7 +198,7 @@ export function PublicLayout() {
       <footer className="border-t border-sand-200 bg-teal-950 py-12 text-sand-100">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <p className="font-display text-lg">{settings?.business_name ?? 'Nataka Holiday Homes'}</p>
+            <p className="font-display text-lg">{settings?.business_name ?? 'Nataka Holidays'}</p>
             <p className="mt-2 max-w-md text-sm text-sand-300">
               {settings?.about_blurb ??
                 'Villas, apartments and beach houses along Diani Beach and the Kenyan Coast.'}
@@ -209,7 +215,7 @@ export function PublicLayout() {
       </footer>
 
       <a
-        href={buildWhatsAppLink('Hello Nataka Holiday Homes, I have a question.')}
+        href={buildWhatsAppLink('Hello Nataka Holidays, I have a question.')}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat with us on WhatsApp"

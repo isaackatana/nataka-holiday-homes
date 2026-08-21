@@ -1,4 +1,4 @@
-# Nataka Holiday Homes
+# Nataka Holidays
 
 Full-stack holiday rental platform for Diani Beach & the Kenyan Coast.
 React + TypeScript + Vite + Tailwind CSS v4 + Supabase, deployed on Vercel.
@@ -25,6 +25,10 @@ npm run dev
 - `npm run build` — regenerates `public/sitemap.xml`, then type-checks (`tsc -b`) and builds
 - `npm run sitemap` — regenerate `public/sitemap.xml` on its own
 - `npm run lint` — oxlint
+- `npm run test` — Vitest (currently covers `useDialogA11y`, the shared
+  Escape-to-close/focus-management hook behind the mobile nav menus and
+  the filter drawer — the kind of subtle re-render/stale-closure bug that
+  looks fine on manual inspection and only shows up under a real test)
 - `npm run preview` — preview the production build locally
 
 ## SEO

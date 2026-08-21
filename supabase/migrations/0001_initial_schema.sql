@@ -1,6 +1,6 @@
 -- =========================================================
 -- 0001_initial_schema.sql
--- Core enums, tables, and indexes for Nataka Holiday Homes.
+-- Core enums, tables, and indexes for Nataka Holidays.
 -- Run this first. Safe to run once against a fresh Supabase project.
 -- =========================================================
 

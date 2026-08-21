@@ -1,5 +1,6 @@
 import { SlidersHorizontal, X } from 'lucide-react'
 import { useAmenities } from '@/features/properties/queries'
+import { useDialogA11y } from '@/hooks/useDialogA11y'
 import type { PropertyFilters } from '@/services/properties.service'
 
 const PROPERTY_TYPES: { value: string; label: string }[] = [
@@ -27,6 +28,13 @@ interface FilterPanelProps {
 
 export function FilterPanel({ filters, onChange, resultCount, isOpen, onClose }: FilterPanelProps) {
   const { data: amenities } = useAmenities()
+  // isOpen only ever becomes true via the mobile-only "Filters" trigger
+  // button (md:hidden in HolidayHomes.tsx) — on desktop this panel is an
+  // always-visible sticky sidebar, not a modal, so role="dialog" isn't
+  // applied here the way it is on PublicLayout/AdminLayout's mobile
+  // menus. Escape-to-close and focus management are still correct
+  // regardless, since in practice isOpen only reflects the mobile case.
+  const panelRef = useDialogA11y<HTMLElement>(isOpen, onClose)
 
   function update<K extends keyof PropertyFilters>(key: K, value: PropertyFilters[K]) {
     onChange({ ...filters, [key]: value })
@@ -60,6 +68,7 @@ export function FilterPanel({ filters, onChange, resultCount, isOpen, onClose }:
       )}
 
       <aside
+        ref={panelRef}
         className={`fixed inset-y-0 right-0 z-50 w-80 overflow-y-auto bg-sand-50 p-6 transition-transform md:sticky md:top-24 md:z-0 md:h-fit md:w-full md:translate-x-0 md:rounded-card md:p-5 md:shadow-card ${
           isOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'
         }`}

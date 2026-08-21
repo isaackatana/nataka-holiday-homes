@@ -1,4 +1,4 @@
-# Supabase setup — Nataka Holiday Homes
+# Supabase setup — Nataka Holidays
 
 This covers Steps 5–7 of the build plan: creating the Supabase project,
 applying the schema, and getting your first admin account working.

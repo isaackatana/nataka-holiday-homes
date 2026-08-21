@@ -11,12 +11,12 @@ export default function About() {
     <div className="mx-auto w-full max-w-4xl px-6 py-12">
       <SEO
         title="About Us"
-        description="Nataka Holiday Homes is a locally-run holiday rental business based in Diani Beach, Kenya."
+        description="Nataka Holidays is a locally-run holiday rental business based in Diani Beach, Kenya."
         path="/about"
       />
 
       <h1 className="font-display text-3xl font-medium text-teal-900 md:text-4xl">
-        {settings?.business_name ?? 'About Nataka Holiday Homes'}
+        {settings?.business_name ?? 'About Nataka Holidays'}
       </h1>
 
       <p className="mt-4 text-lg text-charcoal-700">
@@ -26,7 +26,7 @@ export default function About() {
 
       <div className="mt-6 flex flex-col gap-4 text-charcoal-700">
         <p>
-          Nataka Holiday Homes started with a simple idea: holiday rentals on this coast should
+          Nataka Holidays started with a simple idea: holiday rentals on this coast should
           feel personal, not like booking a room from a faceless platform. Every property we list
           is one we've walked through ourselves — we know the water pressure, the walk to the
           beach, and which room catches the evening breeze.

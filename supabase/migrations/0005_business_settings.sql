@@ -16,7 +16,7 @@ create table business_settings (
   -- (`.single()` always just works) and impossible to accidentally end
   -- up with two "active" rows.
   id boolean primary key default true,
-  business_name text not null default 'Nataka Holiday Homes',
+  business_name text not null default 'Nataka Holidays',
   contact_phone text,
   contact_email text,
   address text,
@@ -31,8 +31,13 @@ create trigger trg_business_settings_updated_at
   before update on business_settings
   for each row execute function set_updated_at();
 
+-- NOTE: on conflict do nothing means this seed only sets the name on a
+-- fresh apply of this migration. If you've already run this against a
+-- live project, updating this file won't retroactively rename anything
+-- already deployed — use Admin → Settings in the app instead (that's
+-- exactly what it's for).
 insert into business_settings (id, business_name)
-values (true, 'Nataka Holiday Homes')
+values (true, 'Nataka Holidays')
 on conflict (id) do nothing;
 
 alter table business_settings enable row level security;
